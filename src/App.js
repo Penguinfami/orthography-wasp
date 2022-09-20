@@ -8,6 +8,7 @@ import InvalidAnswer from './components/InvalidAnswer';
 import FetchData  from './api/FetchData';
 
 import { dailyAlreadySaved, getSavedGame, saveDate, saveGame} from './logic/Storage'
+import BeginPage from './components/BeginPage';
 
 function App() {
 
@@ -172,7 +173,7 @@ function App() {
           : "<game not ready..."
          )  
         :
-        <button onClick={startGame}>Click to start</button>
+        <BeginPage startGame={startGame}/>
       }
 
     </div>
