@@ -1,29 +1,18 @@
 import HoneyComb from "./HoneyComb"
 
-import { useState, useReducer } from 'react'
+import { useState, useReducer, useRef } from 'react'
 import InputField from "./InputField"
 
 const InputContainer = (props) => {
 
-    const inputReducer = (state, action) => {
-        switch(action.type){
-            case "CHANGE":
-                console.log("c")
-                return action.payload
+    const inputRef = useRef()
 
-            case "CLEAR":
-                return ""
-
-            default: return state
-        }
-    }
-
-    const [input, inputDispatch] = useReducer(inputReducer, "")
 
     const onEnter = () => {
         console.log("input is" + input)
-        if (props.onEnter(input)){
-            inputDispatch({ type: "CLEAR" })
+        let word = inputRef.current.value
+        if (props.onEnter(word)){
+            inputRef.current.value = ""
         } else {
 
         }
@@ -31,7 +20,7 @@ const InputContainer = (props) => {
 
     return (
         <div className="InputContainer">
-            <InputField setInput={inputDispatch}/>
+            <InputField ref={inputRef} setInput={inputDispatch}/>
             <HoneyComb centreLetter={props.centreLetter} letters={props.letters}/>
             <button onClick={onEnter}>ENTER</button>
         </div>

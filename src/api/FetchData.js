@@ -14,7 +14,7 @@ class FetchData {
             url = api.url
         } catch (e){
             console.log("Env url")
-            url = process.env.API_URL
+            url = process.env.REACT_APP_API_URL
             console.log(url)
         }
 
