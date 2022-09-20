@@ -15,6 +15,7 @@ class FetchData {
         } catch (e){
             console.log("Env url")
             url = process.env.API_URL
+            console.log(url)
         }
 
         console.log(url)
