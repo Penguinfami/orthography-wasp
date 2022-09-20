@@ -98,7 +98,7 @@ function App() {
       toggleErrorMessage(true)
       setErrorMessage("YOU ARE A GENIUS")
     }
-  }, score)
+  }, [score])
   
   const onEnter = (word) => {
     console.log("word:" + word)

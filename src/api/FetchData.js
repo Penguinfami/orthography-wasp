@@ -13,8 +13,11 @@ class FetchData {
             let api = require('./api.json')
             url = api.url
         } catch (e){
+            console.log("Env url")
             url = process.env.API_URL
         }
+
+        console.log(url)
 
         let response = await axios.get(url)
         //.then(response => {
