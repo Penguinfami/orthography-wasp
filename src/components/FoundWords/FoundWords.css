@@ -1,4 +1,12 @@
+.FoundWords ul{
+    display: flex;
+    flex-flow: column wrap;
+    max-height: 50vh;
+    align-items: flex-start;
+    width: 50%;
+}
+
 li {
-    width: 30vw;
     text-transform: capitalize;
+    max-width: 20%;
 }

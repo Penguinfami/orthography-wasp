@@ -29,7 +29,7 @@ const InputContainer = (props) => {
                 onEnter()
                 return;
             case "Backspace":
-                inputRef.current.value = inputRef.current.value.slice(0, inputRef.current.value.length - 1)
+                inputRef.current.focus()
             default: return
         }
     }, [onEnter])
