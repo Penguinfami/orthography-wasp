@@ -9,7 +9,6 @@ const InputContainer = (props) => {
 
 
     const onEnter = () => {
-        console.log("input is" + input)
         let word = inputRef.current.value
         if (props.onEnter(word)){
             inputRef.current.value = ""
@@ -20,7 +19,7 @@ const InputContainer = (props) => {
 
     return (
         <div className="InputContainer">
-            <InputField ref={inputRef} setInput={inputDispatch}/>
+            <InputField ref={inputRef}/>
             <HoneyComb centreLetter={props.centreLetter} letters={props.letters}/>
             <button onClick={onEnter}>ENTER</button>
         </div>
