@@ -1,10 +1,10 @@
 import { useState, useReducer } from 'react'
-import InputField from "./InputField"
 
+import css from './HoneyComb.css'
 const HoneyComb = (props) => {
 
     return (
-        <div className="HoneyComb">
+        <div style={css} className="HoneyComb">
             {
                 props.letters.map((letter) => 
                     <div className={`letter ${letter}`}>

@@ -1,9 +1,10 @@
 import { useRef } from 'react'
+import css from './index.css'
 
 const InputField = (props) => {
 
     return (
-        <div className="InputField">
+        <div style={css} className="InputField">
             <input ref={props.inputRef} ></input>
         </div>
     )

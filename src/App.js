@@ -79,51 +79,6 @@ function App() {
 
   const fetchData = new FetchData()
 
-  useEffect(()=>{
-    if (!gameReady){
-      async function getData(){
-        let data;
-        if (dailyAlreadySaved()){
-          data = getSavedGame()
-          console.log(" SAVED return is " + data)
-
-        } else {
-          data = await fetchData.extractInfo(); 
-          console.log("return is " + data)
-
-        }
-
-        if (data == null) {
-          setErrorMessage("Fetch data error")
-          toggleErrorMessage(true)
-          return;
-        }
-
-        console.log(game)
-
-        updateGame({ type: "LETTERS", payload: data.letters })
-        updateGame({ type: "POSSIBLE_ANSWERS", payload: data.answersList})
-
-        updateGame({ type: "FOUND_ANSWERS", payload: data.foundAnswers})
-        updateGame({ type: "GENIUS_SCORE", payload: data.geniusScore})
-        updateGame({ type: "CENTRE_LETTER", payload: data.centreLetter})
-        updateGame({ type: "DATE", payload: data.gameDate})
-
-        console.log("done config")
-        console.log(data)
-
-        setGameReady(true)
-      }
-      getData()
-    }
-
-  }, [])
-
-  useEffect(()=>{
-      if (gameReady)
-        saveCurrentGame()
-  }, [gameReady, gameInfo.foundAnswers])
-  
   const onEnter = (word) => {
     console.log("word:" + word)
     console.log(game.getScore())
@@ -148,8 +103,50 @@ function App() {
     return result.success
   }
 
+  useEffect(()=>{
+    if (!gameReady){
+      async function getData(){
+        let data;
+        if (dailyAlreadySaved()){
+          data = getSavedGame()
+          console.log(" SAVED return is " + data)
+          setScore(data.score)
+        } else {
+          data = await fetchData.extractInfo(); 
+          console.log("return is " + data)
+        }
 
+        if (!data) {
+          setErrorMessage("Fetch data error")
+          toggleErrorMessage(true)
+          return;
+        }
 
+        console.log(game)
+
+        updateGame({ type: "LETTERS", payload: data.letters })
+        updateGame({ type: "POSSIBLE_ANSWERS", payload: data.answersList})
+        updateGame({ type: "FOUND_ANSWERS", payload: data.foundAnswers ?  data.foundAnswers: []})
+
+        updateGame({ type: "GENIUS_SCORE", payload: data.geniusScore})
+        updateGame({ type: "CENTRE_LETTER", payload: data.centreLetter})
+        updateGame({ type: "DATE", payload: data.gameDate})
+
+        console.log("done config")
+        console.log(data)
+
+        setGameReady(true)
+      }
+      getData()
+    }
+
+  }, [])
+
+  useEffect(()=>{
+      if (gameReady)
+        saveCurrentGame()
+  }, [gameReady, gameInfo.foundAnswers])
+  
   return (
     <div className="App">
       {gameReady ?

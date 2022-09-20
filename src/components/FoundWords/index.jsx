@@ -1,6 +1,8 @@
+import css from './FoundWords.css'
+
 const FoundWords = (props) => {
   return (
-    <div className="FoundWords">
+    <div style={css} className="FoundWords">
         <h4>Found words</h4>
         <ul>
             {props.words.map((word) => 
