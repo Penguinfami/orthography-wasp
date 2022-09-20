@@ -160,7 +160,7 @@ function App() {
       {gameStart ? 
          (gameReady ?
           <div>
-            {gameInfo.geniusScore <= score ? "YOU ARE A GENIUS" : null}
+            {gameInfo.geniusScore <= score ? <h1>YOU ARE A GENIUS</h1> : null}
               <div>Score: {  score }</div>
               <div>Genius Score: {  gameInfo.geniusScore }</div>
               { errorMessageOn ? <InvalidAnswer message={errorMessage}/> : " " }  
