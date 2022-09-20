@@ -8,13 +8,14 @@ class FetchData {
     }
     
      async scraper () {
-        let api = require('./api.json')
         let url = ""
-        if (!api){
-            url = process.env.API_URL
-        } else {
+        try {
+            let api = require('./api.json')
             url = api.url
+        } catch (e){
+            url = process.env.API_URL
         }
+
         let response = await axios.get(url)
         //.then(response => {
            // console.log(response.data)
