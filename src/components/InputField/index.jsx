@@ -5,7 +5,7 @@ const InputField = (props) => {
 
     return (
         <div style={css} className="InputField">
-            <input ref={props.inputRef} ></input>
+            <input ref={props.inputRef} list="autocompleteOff" autocomplete="off" ></input>
         </div>
     )
 }

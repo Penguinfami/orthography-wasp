@@ -4,8 +4,7 @@ import './App.css';
 
 import Container from './components/Container';
 import  Game  from './logic/Game';
-
-
+import InvalidAnswer from './components/InvalidAnswer';
 import FetchData  from './api/FetchData';
 
 import { dailyAlreadySaved, getSavedGame, saveDate, saveGame} from './logic/Storage'
@@ -13,9 +12,11 @@ import { dailyAlreadySaved, getSavedGame, saveDate, saveGame} from './logic/Stor
 function App() {
 
   const [ gameReady, setGameReady ] = useState(false)
+  const [ gameStart, setGameStart ] = useState(false)
 
   const [ errorMessage, setErrorMessage ] = useState("")
   const [ errorMessageOn, toggleErrorMessage ] = useState(false)
+  const [ errorMessageTimer, setErrorMessageTimer ] = useState(0)
 
   const [ score, setScore ] = useState(0)
 
@@ -55,6 +56,7 @@ function App() {
 
       case "FOUND_ANSWERS":
         console.log("New found answers " + action.payload)
+        action.payload.sort()
         return {
           ...state,
           foundAnswers: action.payload
@@ -95,15 +97,25 @@ function App() {
       console.log("Invalid: " + word + " " + result.message)
       setErrorMessage(result.message)
       toggleErrorMessage(true)
-      setTimeout(()=>{
+      clearTimeout(errorMessageTimer)
+      setErrorMessageTimer(setTimeout(()=>{
         toggleErrorMessage(false)
-      }, 3000)
+      }, 3000))
     }
-
     return result.success
   }
 
+
   useEffect(()=>{
+    console.log("initial use effect")
+  }, [])
+
+  useEffect(()=>{
+      if (gameReady)
+        saveCurrentGame()
+  }, [gameReady, gameInfo.foundAnswers])
+
+  const startGame = () => {
     if (!gameReady){
       async function getData(){
         let data;
@@ -138,31 +150,31 @@ function App() {
         setGameReady(true)
       }
       getData()
+      setGameStart(true)
     }
-
-  }, [])
-
-  useEffect(()=>{
-      if (gameReady)
-        saveCurrentGame()
-  }, [gameReady, gameInfo.foundAnswers])
+  }
   
   return (
     <div className="App">
-      {gameReady ?
-        <div>
-          {gameInfo.geniusScore <= score ? "YOU ARE A GENIUS" : null}
-            <div>Score: {  score }</div>
-            <div>Genius Score: {  gameInfo.geniusScore }</div>
-            <div>{ errorMessageOn ? errorMessage : " " }</div>  
-
-                <Container letters={gameInfo.letters} centreLetter={gameInfo.centreLetter} onEnter={onEnter} foundWords={gameInfo.foundAnswers}/>
-        
-        </div>
-
-
-        : "<game not ready..."
+      {gameStart ? 
+         (gameReady ?
+          <div>
+            {gameInfo.geniusScore <= score ? "YOU ARE A GENIUS" : null}
+              <div>Score: {  score }</div>
+              <div>Genius Score: {  gameInfo.geniusScore }</div>
+              { errorMessageOn ? <InvalidAnswer message={errorMessage}/> : " " }  
+  
+                  <Container letters={gameInfo.letters} centreLetter={gameInfo.centreLetter} onEnter={onEnter} foundWords={gameInfo.foundAnswers}/>
+          
+          </div>
+  
+  
+          : "<game not ready..."
+         )  
+        :
+        <button onClick={startGame}>Click to start</button>
       }
+
     </div>
   );
 }

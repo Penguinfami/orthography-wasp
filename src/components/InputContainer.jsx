@@ -10,7 +10,7 @@ const InputContainer = (props) => {
 
     const onEnter = () => {
         let word = inputRef.current.value
-        if (props.onEnter(word)){
+        if (props.onEnter(word.toLowerCase())){
             inputRef.current.value = ""
         } else {
 
@@ -18,11 +18,18 @@ const InputContainer = (props) => {
     }
 
     const handleKeyDown = useCallback((e) => {
+        console.log(e.key)
+        if ("abcdefghijklmnopqrstuvwxwz".includes(e.key.toLowerCase())){
+            inputRef.current.focus()
+            return
+        }
         switch(e.key){
             case "Enter":
                 console.log("Enter key")
                 onEnter()
                 return;
+            case "Backspace":
+                inputRef.current.value = inputRef.current.value.slice(0, inputRef.current.value.length - 1)
             default: return
         }
     }, [onEnter])
@@ -36,7 +43,10 @@ const InputContainer = (props) => {
         <div className="InputContainer">
             <InputField inputRef={inputRef}/>
             <HoneyComb centreLetter={props.centreLetter} letters={props.letters}/>
-            <button onClick={onEnter}>ENTER</button>
+            <div>
+                <button onClick={onEnter}>ENTER</button>
+                <button onClick={ () => inputRef.current.value = ""}>CLEAR</button>
+            </div>
         </div>
     )
 }

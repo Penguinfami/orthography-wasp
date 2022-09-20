@@ -1,3 +1,4 @@
 li {
     width: 30vw;
+    text-transform: capitalize;
 }
