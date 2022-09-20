@@ -39,9 +39,11 @@ class Game {
 
     calculateScore(word, letters){
         if ( this.isPangram(word, letters) ) {
-            return 7
-        } 
-        return word.length - 3
+            return 7 + word.length
+        } else if (word.length == 4) {
+            return 1
+        }
+        return word.length
     }
 
     getScore(){

@@ -7,7 +7,7 @@ const HoneyComb = (props) => {
         <div className="HoneyComb">
             {
                 props.letters.map((letter) => 
-                    <div className="letter">
+                    <div className={`letter ${letter}`}>
                         {letter !== props.centreLetter ? letter : <strong>{letter}</strong>}
                     </div>
                 )

@@ -45,6 +45,7 @@ function App() {
         }
 
       case "FOUND_ANSWERS":
+        console.log("New found answers " + action.payload)
         return {
           ...state,
           foundAnswers: action.payload
@@ -91,14 +92,8 @@ function App() {
       }
       getData()
     }
-  }, [])
 
-  useEffect(()=>{
-    if (score >= gameInfo.geniusScore){
-      toggleErrorMessage(true)
-      setErrorMessage("YOU ARE A GENIUS")
-    }
-  }, [score])
+  }, [])
   
   const onEnter = (word) => {
     console.log("word:" + word)
@@ -107,7 +102,8 @@ function App() {
     let result = game.submitAnswer(word, gameInfo)
     if (result.success){
       // check for genius
-      updateGame({type: "FOUND_ANSWERS", payload: [ ...gameInfo.foundAnswers , word] })
+      console.log([ ...gameInfo.foundAnswers, word])
+      updateGame({type: "FOUND_ANSWERS", payload: [ ...gameInfo.foundAnswers, word] })
 
       setScore(result.payload + score)
       console.log("Valid: " + word)
@@ -130,6 +126,7 @@ function App() {
     <div className="App">
       {gameReady ?
         <div>
+          {gameInfo.geniusScore <= score ? "YOU ARE A GENIUS" : null}
             <div>Score: {  score }</div>
             <div>Genius Score: {  gameInfo.geniusScore }</div>
             <div>{ errorMessageOn ? errorMessage : " " }</div>  

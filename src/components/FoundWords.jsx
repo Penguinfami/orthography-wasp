@@ -4,7 +4,7 @@ const FoundWords = (props) => {
         <h4>Found words</h4>
         <ul>
             {props.words.map((word) => 
-                <li>{word}</li>
+                <li key={word}>{word}</li>
             )}
         </ul>
     </div>
