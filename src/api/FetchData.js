@@ -10,11 +10,13 @@ class FetchData {
      async scraper () {
         let url = process.env.API_URL
         
-
+        console.log(url)
         let response = await axios.get(url)
         //.then(response => {
            // console.log(response.data)
+           if (response.status === 200)
             return response.data;
+        console.log("Error status scraper")
         //})
         /*.catch(error => {
             console.log(error);
