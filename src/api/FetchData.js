@@ -43,7 +43,6 @@ class FetchData {
             console.log(answersList)
             let letters = answersList.reduce((total, current) => {
                 for (let i = 0; i < current.length; i++){
-                    console.log(current[i])
                     if (!total.includes(current[i])) total.push(current[i])
                 }
                 return total

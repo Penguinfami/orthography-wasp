@@ -8,22 +8,31 @@ import  Game  from './logic/Game';
 
 import FetchData  from './api/FetchData';
 
+import { dailyAlreadySaved, getSavedGame, saveDate, saveGame} from './logic/Storage'
+
 function App() {
 
   const [ gameReady, setGameReady ] = useState(false)
 
-  const [ foundAnswers, setFoundAnswers ] = useState([[]])
-
   const [ errorMessage, setErrorMessage ] = useState("")
   const [ errorMessageOn, toggleErrorMessage ] = useState(false)
 
-  const [ letters, setLetters ] = useState([])
-  const [ centreLetter, setCentreLetter ] = useState("")
-  const [ possibleAnswers, setPossibleAnswers ] = useState([])
-  const [ geniusScore, setGeniusScore ] = useState(0)
   const [ score, setScore ] = useState(0)
 
   const game = new Game()
+
+  const saveCurrentGame = () => {
+    let gameObj = {
+      letters: gameInfo.letters,
+      answersList: gameInfo.possibleAnswers,
+      foundAnswers: gameInfo.foundAnswers,
+      centreLetter: gameInfo.centreLetter,
+      geniusScore: gameInfo.geniusScore,
+      score: score,
+      gameDate: gameInfo.gameDate
+    }
+    saveGame(gameObj)
+  }
 
   const gameReducer = (state, action) => {
     switch(action.type){
@@ -56,7 +65,11 @@ function App() {
           ...state,
           centreLetter: action.payload
         }  
-  
+      case "DATE":
+        return {
+          ...state,
+          gameDate: action.payload
+        }   
 
       default: return state
     }
@@ -69,31 +82,47 @@ function App() {
   useEffect(()=>{
     if (!gameReady){
       async function getData(){
-        let data = await fetchData.extractInfo(); 
-        console.log("return is " + data)
+        let data;
+        if (dailyAlreadySaved()){
+          data = getSavedGame()
+          console.log(" SAVED return is " + data)
+
+        } else {
+          data = await fetchData.extractInfo(); 
+          console.log("return is " + data)
+
+        }
+
         if (data == null) {
           setErrorMessage("Fetch data error")
           toggleErrorMessage(true)
+          return;
         }
 
         console.log(game)
 
-
         updateGame({ type: "LETTERS", payload: data.letters })
         updateGame({ type: "POSSIBLE_ANSWERS", payload: data.answersList})
 
-        updateGame({ type: "FOUND_ANSWERS", payload: []})
+        updateGame({ type: "FOUND_ANSWERS", payload: data.foundAnswers})
         updateGame({ type: "GENIUS_SCORE", payload: data.geniusScore})
         updateGame({ type: "CENTRE_LETTER", payload: data.centreLetter})
+        updateGame({ type: "DATE", payload: data.gameDate})
 
         console.log("done config")
         console.log(data)
+
         setGameReady(true)
       }
       getData()
     }
 
   }, [])
+
+  useEffect(()=>{
+      if (gameReady)
+        saveCurrentGame()
+  }, [gameReady, gameInfo.foundAnswers])
   
   const onEnter = (word) => {
     console.log("word:" + word)
@@ -104,10 +133,9 @@ function App() {
       // check for genius
       console.log([ ...gameInfo.foundAnswers, word])
       updateGame({type: "FOUND_ANSWERS", payload: [ ...gameInfo.foundAnswers, word] })
-
       setScore(result.payload + score)
       console.log("Valid: " + word)
-
+      saveCurrentGame()
     } else {
       console.log("Invalid: " + word + " " + result.message)
       setErrorMessage(result.message)
