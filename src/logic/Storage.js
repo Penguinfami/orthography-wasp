@@ -25,7 +25,7 @@ export function dailyAlreadySaved(){
     console.log(savedDate)
     console.log(today)
 
-    return !(!savedDate || !sameDay(savedDate, today) || sameDay(savedDate, today) && savedDate.getHours() < 8 && today.getHours() > 8 )
+    return !(!savedDate || (!sameDay(savedDate, today) && today.getHours() > 8)|| (sameDay(savedDate, today) && savedDate.getHours() < 8 && today.getHours() > 8) )
 }
 
 export function saveDate(){
