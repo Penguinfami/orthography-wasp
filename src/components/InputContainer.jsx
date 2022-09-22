@@ -10,11 +10,8 @@ const InputContainer = (props) => {
 
     const onEnter = () => {
         let word = inputRef.current.value
-        if (props.onEnter(word.toLowerCase())){
-            inputRef.current.value = ""
-        } else {
-
-        }
+        props.onEnter(word.toLowerCase())
+        inputRef.current.value = ""
     }
 
     const handleKeyDown = useCallback((e) => {
