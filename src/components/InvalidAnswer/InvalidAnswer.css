@@ -3,5 +3,6 @@
     padding: 1rem;
     max-width: 200px;
     border-radius: 40px;
-    margin: auto
+    margin: auto;
+    margin-bottom: 10px;
 }

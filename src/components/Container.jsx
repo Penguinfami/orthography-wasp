@@ -8,7 +8,13 @@ const Container = (props) => {
 
     return (
         <div className="Container">
-            <InputContainer letters={props.letters} centreLetter={props.centreLetter} onEnter={props.onEnter}/>
+            <InputContainer errorMessageOn={props.errorMessageOn} 
+                errorMessage={props.errorMessage} 
+                letters={props.letters} 
+                centreLetter={props.centreLetter} 
+                onShuffle={props.onShuffle} 
+                onEnter={props.onEnter}
+            />
             <FoundWords words={props.foundWords}/>
         </div>
     )

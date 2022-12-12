@@ -2,21 +2,35 @@ import HoneyComb from "./HoneyComb"
 
 import { useState, useReducer, useRef, useEffect, useCallback } from 'react'
 import InputField from "./InputField"
-
+import './style.css'
+import InvalidAnswer from "./InvalidAnswer"
 const InputContainer = (props) => {
 
     const inputRef = useRef()
 
+    const [ clearTimer, setClearTimer ] = useState(null)
 
     const onEnter = () => {
         let word = inputRef.current.value
         props.onEnter(word.toLowerCase())
-        inputRef.current.value = ""
+        setClearTimer(setTimeout(() => { inputRef.current.value = ""; setClearTimer(null)}, 500))
+    }
+
+    const onCombClick = (letter) => {
+        const selectionStart = inputRef.current.selectionStart;
+        const value = inputRef.current.value;
+        inputRef.current.value = value.slice(0, selectionStart) + letter + value.slice(selectionStart);
     }
 
     const handleKeyDown = useCallback((e) => {
         console.log(e.key)
         if ("abcdefghijklmnopqrstuvwxwz".includes(e.key.toLowerCase())){
+            if (clearTimer != null) {
+                
+                clearTimeout(clearTimer)
+                inputRef.current.value = ""
+                setClearTimer(null)
+            }
             inputRef.current.focus()
             return
         }
@@ -38,11 +52,13 @@ const InputContainer = (props) => {
 
     return (
         <div className="InputContainer">
+            {props.errorMessageOn ? <InvalidAnswer message={props.errorMessage}/> : ""}
             <InputField inputRef={inputRef}/>
-            <HoneyComb centreLetter={props.centreLetter} letters={props.letters}/>
-            <div>
-                <button onClick={onEnter}>ENTER</button>
-                <button onClick={ () => inputRef.current.value = ""}>CLEAR</button>
+            <HoneyComb onClick={onCombClick} centreLetter={props.centreLetter} letters={props.letters}/>
+            <div style={{ width: '100%'}}>
+                <button role="button" className='optionButton' onClick={ () => inputRef.current.value = ""}>CLEAR</button>
+                <button role="button" className='optionButton' onClick={props.onShuffle}>SHUFFLE</button>
+                <button role="button" className='optionButton' onClick={onEnter}>ENTER</button>
             </div>
         </div>
     )

@@ -72,7 +72,14 @@ function App() {
         return {
           ...state,
           gameDate: action.payload
-        }   
+        } 
+      case "SHUFFLE":
+        return {
+          ...state,
+          letters: state.letters.sort(() => 
+            Math.random() - 0.5
+          )
+        }  
 
       default: return state
     }
@@ -101,9 +108,13 @@ function App() {
       clearTimeout(errorMessageTimer)
       setErrorMessageTimer(setTimeout(()=>{
         toggleErrorMessage(false)
-      }, 3000))
+      }, 1000))
     }
     return result.success
+  }
+
+  const onShuffle = () => {
+    updateGame({type: 'SHUFFLE'})
   }
 
 
@@ -162,11 +173,8 @@ function App() {
           <div>
             {gameInfo.geniusScore <= score ? <h1>YOU ARE A GENIUS</h1> : null}
               <div>Score: {  score }</div>
-              <div>Genius Score: {  gameInfo.geniusScore }</div>
-              { errorMessageOn ? <InvalidAnswer message={errorMessage}/> : " " }  
-  
-                  <Container letters={gameInfo.letters} centreLetter={gameInfo.centreLetter} onEnter={onEnter} foundWords={gameInfo.foundAnswers}/>
-          
+              <div>Genius Score: {  gameInfo.geniusScore }</div>  
+                  <Container letters={gameInfo.letters} errorMessageOn={errorMessageOn} errorMessage={errorMessage} centreLetter={gameInfo.centreLetter} onEnter={onEnter} onShuffle={onShuffle} foundWords={gameInfo.foundAnswers}/>
           </div>
   
   
