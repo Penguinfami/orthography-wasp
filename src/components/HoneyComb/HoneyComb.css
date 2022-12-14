@@ -10,7 +10,7 @@
 
 .Comb-0 {
     margin: auto;
-    top: 0;
+    top: 2.5px;
     right: 0;
     left: 0;
 }
@@ -26,7 +26,7 @@
 }
 
 .Comb-3{
-    top: 165px;
+    top: 162.5px;
     left: 0;
     right: 0;
     margin: auto;
@@ -43,7 +43,7 @@
 }
 
 .Comb-centre{
-    top: 85px;
+    top: 82.5px;
     left: 0;
     right: 0;
     margin: auto;
