@@ -57,7 +57,7 @@ class DOMConverter {
 
     getInnerTextList(list = []){
         let arr = [];
-        if (list === []) {
+        if (list == []) {
             list = this.getElementsByTagName("*");
         }
         for (let i = 0; i < list.length; i++){

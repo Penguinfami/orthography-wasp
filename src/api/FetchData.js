@@ -39,11 +39,12 @@ class FetchData {
             let answersListElement = dom.getElementById("main-answer-list")
             console.log(answersListElement)
             let answersList = dom.getListByInnerText("", answersListElement.childNodes[1].childNodes)
-            answersList = answersList.map((ans) => ans.trim())
+            const alpha = new RegExp("[a-z]+")
+            answersList = answersList.map((ans) => alpha.exec(ans)[0]).filter(s => s)
             console.log(answersList)
             let letters = answersList.reduce((total, current) => {
                 for (let i = 0; i < current.length; i++){
-                    if (!total.includes(current[i])) total.push(current[i])
+                    if (!total.includes(current[i]) && alpha.test(current[i])) total.push(current[i])
                 }
                 return total
             }, [])
@@ -56,7 +57,7 @@ class FetchData {
             let geniusScore = parseInt(geniusText[geniusText.length - 1])
         
             // this is dumb but idk what else to do
-            let centreLetter = letters.filter((letter) => answersList.filter((answer) => !answer.includes(letter)).length == 0)[0]
+            let centreLetter = letters.filter((letter) => answersList.filter((answer) => !answer.includes(letter)).length === 0)[0]
            
             return {
                 letters: letters,
